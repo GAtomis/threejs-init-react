@@ -2,7 +2,7 @@
  * @Author: Gavin 850680822@qq.com
  * @Date: 2022-11-26 10:28:37
  * @LastEditors: Gavin 850680822@qq.com
- * @LastEditTime: 2022-12-07 19:33:43
+ * @LastEditTime: 2022-12-07 22:51:33
  * @FilePath: \three-admin-react\src\views\About.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -12,7 +12,7 @@ import { useEffect } from "react"
 import * as THREE from "three"
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import gsap from 'gsap'
-import { RGBA_ASTC_5x4_Format } from "three"
+import  {useGui} from "@/utils/useGui"
 function About() {
 
     /* 初始化部分 */
@@ -41,6 +41,23 @@ function About() {
     /* 初始化部分 */
     const clock = new THREE.Clock()
     let controls:OrbitControls
+    
+    useGui(gui=>{
+        gui.add(cube.position,"x").min(0).max(5).step(0.01).name("移动x轴").onChange((val:any)=>{console.log(val,"改变");
+        }).onFinishChange((val:any)=>{
+            console.log(val,"结束改变");   
+        })
+        gui.add(cube.position,"y").min(0).max(5).step(0.01).name("移动y轴")
+        gui.add(cube.position,"z").min(0).max(5).step(0.01).name("移动z轴")
+        gui.add(cube.rotation,"x").min(0).max(Math.PI).name("x轴旋转")
+        const params={
+            color:"#ffff00"
+        }
+        gui.addColor(params,"color").onChange((val:any)=>{
+            console.log(val);
+            cube.material.color.set(val) ; 
+        })
+    })
     useEffect(() => {
         //渲染dom
         const warp = document.getElementById("warp-about")
@@ -54,7 +71,7 @@ function About() {
         setAxesHelper()
         setScale()
         setRotation()
-        runGsap()
+        // runGsap()
 
         // setTimeout(()=>{
         //   // cube.position.set(5,0,0)
@@ -82,8 +99,6 @@ function About() {
             document.exitFullscreen()
         }
     })
-
-
     /**
      * @description: 轨道控制器查看物体
      * @param {number} time
