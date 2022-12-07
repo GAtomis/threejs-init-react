@@ -7,14 +7,14 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 import App from '@/App'
-import About from '@/views/About'
+import About from '@/views/THREE_JS/About'
 import Home from '@/views/Home'
 import Login from "@/views/Login"
-import Gasp from '@/views/Gasp'
+import Gasp from '@/views/THREE_JS/Gasp'
 import React, { lazy } from 'react'
 import { BrowserRouter, HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Layout from '@/layout'
-const AboutPage = lazy(() => import("@/views/About"))
+const AboutPage = lazy(() => import("@/views/THREE_JS/About"))
 const HomePage = lazy(() => import("@/views/Home"))
 const baseRouter = () => (<BrowserRouter>
     <Routes  >

@@ -2,7 +2,7 @@
  * @Author: Gavin 850680822@qq.com
  * @Date: 2022-11-26 10:28:37
  * @LastEditors: Gavin 850680822@qq.com
- * @LastEditTime: 2022-12-07 16:53:36
+ * @LastEditTime: 2022-12-07 19:33:43
  * @FilePath: \three-admin-react\src\views\About.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -64,7 +64,23 @@ function About() {
     }, [])
     window.addEventListener("resize",()=>{
         console.log("尺寸发生改变");
-        
+        //随着窗口变化更新摄像头
+        camera.aspect=winWidth/winHeigh
+        //更新摄像头矩阵
+        camera.updateProjectionMatrix()
+        //重置渲染器
+        renderer.setSize(winWidth,winHeigh)
+        //设置像素比
+        renderer.setPixelRatio(window.devicePixelRatio )
+ 
+    })
+    //监听双击
+    window.addEventListener('dblclick',()=>{
+        if(!document.fullscreenElement){
+            renderer.domElement.requestFullscreen()
+        }else{
+            document.exitFullscreen()
+        }
     })
 
 
@@ -151,6 +167,7 @@ function About() {
         })
         gsap.to(cube.rotation, { x: 2 * Math.PI, duration: 5, ease: "power1.inOut", onComplete: () => console.log("动画完成"), onStart: () => console.log("动画开始") })
     }
+
     return (
         <div id="warp-about">
 
