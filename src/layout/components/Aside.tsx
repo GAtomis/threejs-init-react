@@ -2,7 +2,7 @@
  * @Author: Gavin 850680822@qq.com
  * @Date: 2022-12-01 14:55:43
  * @LastEditors: Gavin 850680822@qq.com
- * @LastEditTime: 2022-12-01 21:30:19
+ * @LastEditTime: 2022-12-07 12:50:19
  * @FilePath: \three-admin-react\src\layout\components\Aside.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -51,8 +51,9 @@ const Aside: React.FC = () => {
 
         setMenus([
             getItem("Dashboard", "/home", <VideoCameraOutlined />),
-            getItem('About', 'about', <UserOutlined />, [
-                getItem('Home', '/about'),
+            getItem('ThreeJS', 'about', <UserOutlined />, [
+                getItem('Demo', '/about'),
+                getItem('gasp', '/gasp'),
             ]),
 
 
