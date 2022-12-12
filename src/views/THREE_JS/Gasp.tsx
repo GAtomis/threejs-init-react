@@ -1,8 +1,8 @@
 /*
  * @Author: Gavin 850680822@qq.com
  * @Date: 2022-11-26 10:28:37
- * @LastEditors: Gavin 850680822@qq.com
- * @LastEditTime: 2022-12-07 22:51:33
+ * @LastEditors: “Gavin” “850680822@qq.com”
+ * @LastEditTime: 2022-12-12 21:54:06
  * @FilePath: \three-admin-react\src\views\About.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -12,7 +12,9 @@ import { useEffect } from "react"
 import * as THREE from "three"
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import gsap from 'gsap'
+import wenli2 from './wenli2.jpeg'
 import  {useGui} from "@/utils/useGui"
+import useTorus from '@/views/THREE_JS/material/useTorus'
 function About() {
 
     /* 初始化部分 */
@@ -27,11 +29,44 @@ function About() {
     //场景中添加相机
     scene.add(camera)
     //创建几何体 长宽深
-    const cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
-    //基础材质
-    const cubeMaterial = new THREE.MeshBasicMaterial({ color: "#FFD700" })
-    //根据几何体和材质创建物体
-    const cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
+    const geometry = new THREE.BoxGeometry(1, 1, 1)
+
+       //导入纹理
+       const textureLoader=new THREE.TextureLoader()
+       const doorPic=textureLoader.load(wenli2)
+       console.log(doorPic);
+       
+    //基础材质  
+    const material = new THREE.MeshBasicMaterial({ color: "#FFD700",map:doorPic })
+ 
+    useGui(gui=>{
+            gui.add(doorPic.center,'x',0,1).step(0.1).name("对于旋转的中心X点")
+            gui.add(doorPic.center,'y',0,1).step(0.1).name("对于旋转的中心Y点")
+            gui.add(doorPic,"rotation",0,Math.PI*2).name("纹理旋转")
+                    const params={
+            color:"#ffff00"
+        }
+        gui.addColor(params,"color").onChange((val:any)=>{
+            console.log(val);
+            cube.material.color.set(val) ; 
+        })
+        
+    })
+    // const guiParams={
+    //     radius:10,
+    //     tube:3,
+    //     radialSegments:16,
+    //     tubularSegments:100
+    // }
+    // const {geometry,material}=useTorus(guiParams)
+    // useGui(gui=>{
+    //     // console.log(cube);
+    //     const folder = gui.addFolder( 'THREE.TorusGeometry' );
+    //     folder.add(guiParams,"radius",1,20).step(0.01).name('半径')
+    // })
+    // //根据几何体和材质创建物体
+    const cube = new THREE.Mesh(geometry,material)
+
     //将几何体渲染到场景中 
     scene.add(cube)
     //初始化渲染器
@@ -42,22 +77,23 @@ function About() {
     const clock = new THREE.Clock()
     let controls:OrbitControls
     
-    useGui(gui=>{
-        gui.add(cube.position,"x").min(0).max(5).step(0.01).name("移动x轴").onChange((val:any)=>{console.log(val,"改变");
-        }).onFinishChange((val:any)=>{
-            console.log(val,"结束改变");   
-        })
-        gui.add(cube.position,"y").min(0).max(5).step(0.01).name("移动y轴")
-        gui.add(cube.position,"z").min(0).max(5).step(0.01).name("移动z轴")
-        gui.add(cube.rotation,"x").min(0).max(Math.PI).name("x轴旋转")
-        const params={
-            color:"#ffff00"
-        }
-        gui.addColor(params,"color").onChange((val:any)=>{
-            console.log(val);
-            cube.material.color.set(val) ; 
-        })
-    })
+
+    // useGui(gui=>{
+    //     gui.add(cube.position,"x").min(0).max(5).step(0.01).name("移动x轴").onChange((val:any)=>{console.log(val,"改变");
+    //     }).onFinishChange((val:any)=>{
+    //         console.log(val,"结束改变");   
+    //     })
+    //     gui.add(cube.position,"y").min(0).max(5).step(0.01).name("移动y轴")
+    //     gui.add(cube.position,"z").min(0).max(5).step(0.01).name("移动z轴")
+    //     gui.add(cube.rotation,"x").min(0).max(Math.PI).name("x轴旋转")
+    //     const params={
+    //         color:"#ffff00"
+    //     }
+    //     gui.addColor(params,"color").onChange((val:any)=>{
+    //         console.log(val);
+    //         cube.material.color.set(val) ; 
+    //     })
+    // })
     useEffect(() => {
         //渲染dom
         const warp = document.getElementById("warp-about")
