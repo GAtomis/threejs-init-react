@@ -16,7 +16,7 @@ import  {useGui} from "@/utils/useGui"
 function About() {
 
     /* 初始化部分 */
-    const winWidth = window.innerWidth * .8,
+    const winWidth = window.innerWidth * .8, 
         winHeigh = window.innerHeight * .8
     //构建场景
     const scene = new THREE.Scene()
