@@ -2,7 +2,7 @@
  * @Author: Gavin 850680822@qq.com
  * @Date: 2022-11-26 10:28:37
  * @LastEditors: “Gavin” “850680822@qq.com”
- * @LastEditTime: 2022-12-12 21:54:06
+ * @LastEditTime: 2022-12-12 23:30:30
  * @FilePath: \three-admin-react\src\views\About.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -12,7 +12,7 @@ import { useEffect } from "react"
 import * as THREE from "three"
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import gsap from 'gsap'
-import wenli2 from './wenli2.jpeg'
+import wenli3 from './wenli3.webp'
 import  {useGui} from "@/utils/useGui"
 import useTorus from '@/views/THREE_JS/material/useTorus'
 function About() {
@@ -33,7 +33,9 @@ function About() {
 
        //导入纹理
        const textureLoader=new THREE.TextureLoader()
-       const doorPic=textureLoader.load(wenli2)
+       const doorPic=textureLoader.load(wenli3)
+       doorPic.minFilter=THREE.NearestFilter
+       doorPic.magFilter=THREE.NearestFilter
        console.log(doorPic);
        
     //基础材质  
@@ -46,7 +48,7 @@ function About() {
                     const params={
             color:"#ffff00"
         }
-        gui.addColor(params,"color").onChange((val:any)=>{
+        gui.addColor(params,"color" ).onChange((val:any)=>{
             console.log(val);
             cube.material.color.set(val) ; 
         })
