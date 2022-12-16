@@ -1,22 +1,32 @@
 /*
  * @Author: “Gavin” “850680822@qq.com”
  * @Date: 2022-12-11 23:46:13
- * @LastEditors: “Gavin” “850680822@qq.com”
- * @LastEditTime: 2022-12-16 16:00:58
+ * @LastEditors: GAtomis 850680822@qq.com
+ * @LastEditTime: 2022-12-16 23:56:18
  * @FilePath: /workspace/threejs-init-react/src/store/modules/app.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
+
+type appState ={
+        token:string
+        username:string
+        avatar:string
+
+}
 const store={
     state:{
         token:"",
-        username:"",
+        username:"root",
         avatar:""
     },
     action:{
-        app1(newState:{num:number},action:{type:string}){
+        setToken(newState:appState,action:{type:string,val:any}){
+            newState.token="appdssds"
+            
             
         },
-        app2(newState:{num:number},action:{type:string}){
+        setUsername(newState:appState,action:{type:string,val:any}){
+            newState.username=action.val
 
         }
     },
