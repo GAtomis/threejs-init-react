@@ -2,7 +2,7 @@
  * @Author: Gavin 850680822@qq.com
  * @Date: 2022-12-01 23:21:08
  * @LastEditors: “Gavin” “850680822@qq.com”
- * @LastEditTime: 2022-12-15 23:49:51
+ * @LastEditTime: 2022-12-16 13:59:40
  * @FilePath: \three-admin-react\src\views\Login.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -95,33 +95,51 @@ export default function Login() {
                     }
                 }
             }
+        ],
+        "code":[
+            {
+                validator: (rule: any, value: any, callback: (err?: Error) => void) => {
+
+                    if (value) {
+                        callback()
+
+                    } else {
+
+                        callback(new Error('请输入验证码'));
+                    }
+                }
+            },
+            {
+                validator: (rule: any, value: any, callback: (err?: Error) => void) => {
+                    console.log(typeof value);
+                    
+                    if (value.length==4) {
+                        callback()
+
+                    } else {
+                        callback(new Error('验证码输入4位'));
+                    }
+                }
+            },
+        
         ]
     }
     // 列表表单
     const [labelForm, setLabelForm] = useState<any>({})
     //验证逻辑
     const getRules = (field: string) => {
-
-
         if (rules && rules[field]) {
             const data: any = form
             let errMsg = ""
             const isPass = rules[field].every((item: any) => {
-
                 let state = true
-
                 item?.validator(null, data[field], (err?: Error) => {
-
                     if (err) {
                         state = false
                         errMsg = err.message
-
                     }
-
                 })
-
                 return state
-
             })
 
             if (!isPass) {
@@ -145,7 +163,6 @@ export default function Login() {
                
 
                 }
-
             }
 
         }
