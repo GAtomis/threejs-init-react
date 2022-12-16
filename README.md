@@ -117,4 +117,4 @@ const {num} = useSelector(state=>{
 * 纹理旋转
 * 纹理透明度
 * 纹理遮挡对比度
-* 纹理光线
+* 纹理光线-PBR

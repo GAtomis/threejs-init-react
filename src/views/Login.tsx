@@ -1,24 +1,20 @@
 /*
  * @Author: Gavin 850680822@qq.com
  * @Date: 2022-12-01 23:21:08
- * @LastEditors: Gavin 850680822@qq.com
- * @LastEditTime: 2022-12-05 14:54:46
+ * @LastEditors: “Gavin” “850680822@qq.com”
+ * @LastEditTime: 2022-12-15 23:49:51
  * @FilePath: \three-admin-react\src\views\Login.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 
 
-import React, { useState } from 'react'
-import { } from 'antd'
+import React, { useEffect, useState } from 'react'
 import './login.scss'
-import { stringify } from 'querystring'
-type LoginForm={
-    username:string
-    password:string
-}
+import type { Login as LoginForm } from '@/model/user/types'
+
+import useVerification from '@/hooks/useVerification'
+import { login } from '@/api/user-api'
 export default function Login() {
-
-
     const body = document.querySelector(".body");
     const modal = document.querySelector(".modal");
     const modalButton = document.querySelector(".modal-button");
@@ -29,7 +25,7 @@ export default function Login() {
 
     const openModal = () => {
         console.log("点击");
-        
+
         setIsHidden(true)
     }
     const closeModal = () => {
@@ -38,12 +34,12 @@ export default function Login() {
 
     window.addEventListener("scroll", () => {
 
-        
+
         if (window.scrollY > window.innerHeight / 3 && !isOpened) {
             console.log("滚动");
             isOpened = true;
             // @ts-ignore
-            scrollDown&&(scrollDown!.style.display = "none");
+            scrollDown && (scrollDown!.style.display = "none");
             openModal();
         }
     });
@@ -51,18 +47,146 @@ export default function Login() {
         evt = evt || window.event;
         evt.keyCode === 27 ? closeModal() : false;
     };
-  
-    const [form,setForm]=useState<LoginForm>({username:"",password:''})
+    const { codeUrl, setCodeUrl, resetCode } = useVerification((url => {
+        setForm({ ...form, ...{ ['code']: ''.trim() } })
+    }))
+    //业务员
+    const [form, setForm] = useState<LoginForm>({ username: "", password: '', code: '' })
     //输入数据流
-    const inputForm=(e:React.ChangeEvent<HTMLInputElement>,label:"username"|"password")=>{
-            console.log(e.currentTarget!.value,label);
-            setForm({...form,...{[label]:e.currentTarget!.value.trim()}})  
+    const inputForm = (e: React.ChangeEvent<HTMLInputElement>, label: "username" | "password" | "code") => {
+        console.log(e.currentTarget!.value, label);
+        setForm({ ...form, ...{ [label]: e.currentTarget!.value.trim() } })
     }
-    //点击Login
-    const loginForm = ()=>{
 
+
+    //验证规则
+    const rules: any = {
+        "username": [
+            {
+                validator: (rule: any, value: any, callback: (err?: Error) => void) => {
+                    if (value) {
+                        callback()
+                    } else {
+                        callback(new Error('请输入用户名'));
+                    }
+                }
+            },{
+
+                validator: (rule: any, value: any, callback: (err?: Error) => void) => {
+                    if (value.length>5) {
+                        callback()
+                    } else {
+                        callback(new Error('用户名长度必须大于5'));
+                    }
+                }
+            }
+        ],
+        "password": [
+
+            {
+                validator: (rule: any, value: any, callback: (err?: Error) => void) => {
+
+                    if (value) {
+                        callback()
+
+                    } else {
+
+                        callback(new Error('请输入密码'));
+                    }
+                }
+            }
+        ]
+    }
+    // 列表表单
+    const [labelForm, setLabelForm] = useState<any>({})
+    //验证逻辑
+    const getRules = (field: string) => {
+
+
+        if (rules && rules[field]) {
+            const data: any = form
+            let errMsg = ""
+            const isPass = rules[field].every((item: any) => {
+
+                let state = true
+
+                item?.validator(null, data[field], (err?: Error) => {
+
+                    if (err) {
+                        state = false
+                        errMsg = err.message
+
+                    }
+
+                })
+
+                return state
+
+            })
+
+            if (!isPass) {
+
+                return {
+                        field,
+                        errMsg,
+                        className: " showTip tip  ",
+                        isPass
+         
+                }
+
+
+            } else {
+                return {
+
+                         field,
+                        errMsg,
+                        className: " fadeTip tip  ",
+                        isPass
+               
+
+                }
+
+            }
+
+        }
+        return null
+
+
+    }
+
+    const validationProcess=()=>{
+
+        return new Promise((resolve,reject)=>{
+            //是否通过验证
+            let state=true
+            const item={}
+            Object.keys(rules).forEach((key) => {
+                console.log(key);
+               const res= getRules(key)
+               res&&Object.assign(item,{[key]:res})&&(!res.isPass&&(state=res.isPass))
+            
+            })
+            setLabelForm(item)
+            state?resolve(console.log("pass!")):reject(console.warn("Form validation failed"));
+
+        })
+   
         
     }
+    //点击Login
+    const loginForm = async () => {
+        
+        await  validationProcess()
+        await login(form)
+            
+
+
+    }
+
+
+
+
+
 
 
     return (
@@ -80,15 +204,30 @@ export default function Login() {
                         <p className="modal-desc">Welcome to our Metauniverse Content Center.</p>
                         <div className="input-block">
                             <label htmlFor="Username" className="input-label">Username</label>
-                            <input  name="Username" value={form.username}  onChange={e=>inputForm(e,"username")} id="email" placeholder="user001" />
+                            <input name="Username" value={form.username} onChange={e => inputForm(e, "username")} id="email" placeholder="user001" />
                         </div>
+                        <p className={labelForm?.['username']?.className ?? 'tip'}>{labelForm && labelForm['username'] ? labelForm['username'].errMsg : ''}
+                        </p>
                         <div className="input-block">
-                            <label  htmlFor="password" className="input-label">Password</label>
-                            <input type="password"  value={form.password} onChange={e=>inputForm(e,"password")}   name="password" id="password" placeholder="Password" />
+                            <label htmlFor="password" className="input-label">Password</label>
+                            <input type="password" value={form.password} onChange={e => inputForm(e, "password")} name="password" id="password" placeholder="Password" />
                         </div>
+                        <p className={labelForm?.['password']?.className ?? 'tip'}>{labelForm && labelForm['password'] ? labelForm['password'].errMsg : ''}</p>
+                        <div className="input-block">
+                            <div className='Verification-warp'>
+                                <div className='Verification-form'>
+                                    <label htmlFor="Verification" className="input-label">Verification</label>
+                                    <input type="Verification" value={form.code} onChange={e => inputForm(e, "code")} name="Verification" id="Verification" placeholder="Verification" />
+                                </div >
+                                <img onClick={resetCode} src={codeUrl as string} className="Verification-code" alt="" />
+                            </div>
+
+                        </div>
+                        <p className={labelForm?.['code']?.className ?? 'tip'}>{labelForm && labelForm['code'] ? labelForm['code'].errMsg : ''}</p>
                         <div className="modal-buttons" >
                             <a href="" className="">Forgot your password?</a>
                             <button className="input-button" onClick={loginForm}>Login</button>
+
                         </div>
                         <p className="sign-up">Don't have an account? <a href="#">Sign up now</a></p>
                     </div>

@@ -178,15 +178,26 @@
   color: #8c7569;
   transition: 0.3s;
 }
+.tip{
+  line-height: 20px;
+  height: 20px;
+  font-size: 12px;
+  color: red;
+}
 
+.tip-close{
+    display: none;
+
+}
 .input-block {
   display: flex;
   flex-direction: column;
   padding: 10px 10px 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  margin-bottom: 20px;
+  // margin-bottom: 20px;
   transition: 0.3s;
+
 
   input {
     outline: 0;
@@ -250,4 +261,47 @@
   .modal-right {
     display: none;
   }
+}
+
+#Verification{
+  // width: 80%;
+
+}
+.Verification-warp{
+
+  display: flex;
+}
+.Verification-form{
+   width: 70%;
+}
+.Verification-code{
+      // float: right;
+      width: 30%;
+      cursor:pointer;
+      // height: 90%;
+}
+
+
+
+.fadeTip{
+
+       animation-fill-mode: forwards!important;
+	animation:fadenum12 2s 1;
+}
+
+@keyframes fadenum12{
+   0%{opacity: 1;}
+   100%{opacity: 0;}
+}
+
+.showTip{
+	animation:showDivAni 2s 1;
+
+       animation-fill-mode: forwards !important;
+}
+
+@keyframes showDivAni{
+	0%{opacity:0;}
+	100%{opacity: 1;}
+	
 }
