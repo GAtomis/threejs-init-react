@@ -270,13 +270,16 @@
 .Verification-warp{
 
   display: flex;
+  align-items: center;
+  
 }
 .Verification-form{
    width: 70%;
 }
 .Verification-code{
       // float: right;
-      width: 30%;
+      width: 35%;
+      height: 100%;
       cursor:pointer;
       // height: 90%;
 }

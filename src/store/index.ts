@@ -9,10 +9,19 @@
 
 
 
-import { combineReducers, legacy_createStore } from "redux";
+import { combineReducers, legacy_createStore,compose,applyMiddleware } from "redux";
+import reduxThunk from  'redux-thunk'
 import  appReducer  from './modules/app/reducer';
 import  userReducer  from './modules/user/reducer';
-const store=legacy_createStore(combineReducers({appReducer,userReducer}),window.__REDUX_DEVTOOLS_EXTENSION__?.())
+
+const reducers=combineReducers({appReducer,userReducer})
+//无redux-thunk
+// const store=legacy_createStore(reducers,window.__REDUX_DEVTOOLS_EXTENSION__?.())
+
+//添加redux-thunk
+let composeEnhancers=window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__?window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({}):compose
+const store=legacy_createStore(reducers,composeEnhancers(applyMiddleware(reduxThunk)))
+
 export default store
 
 export type RootState=ReturnType<typeof store.getState>

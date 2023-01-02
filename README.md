@@ -106,6 +106,13 @@ const {num} = useSelector(state=>{
   );
 ```
 
+### 处理react-redux异步问题 
+安装redux-thunk
+```
+npm i redux-thunk
+```
+更换插件
+
 ## THREE JS
 * 初始化镜头,场景,渲染器 dom,材料
 * Gsap 动画渲染

@@ -1,8 +1,8 @@
 /*
  * @Author: Gavin 850680822@qq.com
  * @Date: 2022-12-01 23:21:08
- * @LastEditors: “Gavin” “850680822@qq.com”
- * @LastEditTime: 2022-12-16 13:59:40
+ * @LastEditors: GAtomis 850680822@qq.com
+ * @LastEditTime: 2022-12-17 12:01:49
  * @FilePath: \three-admin-react\src\views\Login.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -14,6 +14,7 @@ import type { Login as LoginForm } from '@/model/user/types'
 
 import useVerification from '@/hooks/useVerification'
 import { login } from '@/api/user-api'
+import { useDispatch } from 'react-redux'
 export default function Login() {
     const body = document.querySelector(".body");
     const modal = document.querySelector(".modal");
@@ -73,10 +74,11 @@ export default function Login() {
             },{
 
                 validator: (rule: any, value: any, callback: (err?: Error) => void) => {
-                    if (value.length>5) {
+                    const limit=4
+                    if (value.length>=limit) {
                         callback()
                     } else {
-                        callback(new Error('用户名长度必须大于5'));
+                        callback(new Error('用户名长度必须大于'+limit));
                     }
                 }
             }
@@ -190,11 +192,16 @@ export default function Login() {
    
         
     }
+
+    const dispatch =useDispatch()
     //点击Login
     const loginForm = async () => {
         
         await  validationProcess()
-        await login(form)
+       const res=await login(form)
+
+        console.log("res",res);
+        
             
 
 

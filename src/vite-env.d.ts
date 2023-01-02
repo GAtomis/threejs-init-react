@@ -9,3 +9,8 @@
 /// <reference types="vite/client" />
 declare module "*.ts"
 declare module "dat.gui"
+
+interface Window{
+    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__:Function;
+    __REDUX_DEVTOOLS_EXTENSION__:Function;
+}

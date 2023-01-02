@@ -10,15 +10,19 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 // import type { AState } from '@/store/reducer'
 import {RootState} from "@/store"
+import appStore from '@/store/modules/app/app'
 
 const App: React.FC = () => {
-  const { root } = useSelector<RootState>((state) => ({
+  const{root} = useSelector((state:RootState) => ({
     root: state.appReducer.username 
   }))
   const dispatch = useDispatch()
   //  dispatch({type:"add4"})
   const clickHome = () => {
-    dispatch({ type: "setUsername", val: "我的对手" })
+
+
+
+    dispatch(appStore.asyncActions.asyncSetToken({val:"我要改变"}))
   }
   return (
 

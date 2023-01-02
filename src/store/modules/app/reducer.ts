@@ -12,7 +12,10 @@ import app from './app'
 let reducer=(state=defaultState,action:{type:string,val:number})=>{
     let newState= JSON.parse(JSON.stringify(state)) 
     console.log(action);
-    app.action?.[action.type]?.(newState,action)
+
+    let ac= app.action as {[index:string]:Function}
+    ac?.[action.type]?.(newState,action)
+    // app.action?.[action.type]?.(newState,action)
     // switch(action.type){
     //     case "add1":
     //     break
