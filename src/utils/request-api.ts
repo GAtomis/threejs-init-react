@@ -8,20 +8,18 @@
 import axios, { AxiosResponse, AxiosInstance ,AxiosRequestHeaders} from "axios"
 import {baseUrlwhiteList,successCode} from './index'
 
-
 const rootPath = import.meta.env.VITE_BASE_API as string
-
+import { message } from 'antd';
 const instance = axios.create({
   baseURL: rootPath
 });
 instance.interceptors.request.use((config) => {
 
   if(baseUrlwhiteList.some(item=>config.baseURL?.includes(item))) return config
-    const token =localStorage.getItem('token')
+    const token =sessionStorage.getItem('token')
   config.headers!.Authorization=token
 
 
-  console.log("请求");
   return config
 })
 instance.interceptors.response.use((response) => {
@@ -39,7 +37,11 @@ instance.interceptors.response.use((response) => {
   if (res && !successCode.includes(res.code.toString())) {
     console.log(res.code);
     // error(res.message||res.msg)
-    return Promise.reject(new Error(res.message || '返回码异常Error'))
+
+    message.error(res.message || res.msg||'返回码异常Error')
+
+
+    return Promise.reject(new Error(res.message || res.msg||'返回码异常Error'))
     
   } else {
     return res
@@ -48,7 +50,7 @@ instance.interceptors.response.use((response) => {
 }, error => {
   console.log('err' + error) // for debug
 
-  error(error)
+  message.error(error.message || error.msg||'返回码异常Error')
   return Promise.reject(error)
 }
 )

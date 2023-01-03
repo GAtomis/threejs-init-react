@@ -14,6 +14,7 @@ import reduxThunk from  'redux-thunk'
 import  appReducer  from './modules/app/reducer';
 import  userReducer  from './modules/user/reducer';
 
+
 const reducers=combineReducers({appReducer,userReducer})
 //无redux-thunk
 // const store=legacy_createStore(reducers,window.__REDUX_DEVTOOLS_EXTENSION__?.())

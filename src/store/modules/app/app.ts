@@ -10,32 +10,20 @@ import type {Store}from '../types'
 import {login} from '@/api/user-api'
 import type {Login} from '@/model/user/types'
 type appState ={
-        token:string
-        username:string
-        avatar:string
+  
 
 }
 
 const store={
     state:{
-        token:"",
-        username:"root",
-        avatar:""
+
+
     },
     action:{
-        setToken(newState:appState,action:{type:string,val:string}){
-            newState.token=action.val
-        }, 
-        setUsername(newState:appState,action:{type:string,val:any}){
-            newState.username=action.val  
-        }
+   
     }, 
     asyncActions:{
-        asyncSetToken:(action?:{type?:string,val:string})=>(disp:Function)=>{
-            action?.val&&setTimeout(()=>{
-                disp({type:'setUsername',val:action.val})
-            },1000)           
-        }
+
     }
 
 }

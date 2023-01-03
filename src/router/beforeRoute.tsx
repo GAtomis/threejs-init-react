@@ -8,7 +8,8 @@
  */
 
 import { useEffect } from 'react'
-import {useLocation, useNavigate} from 'react-router-dom'
+import {useLocation, useNavigate,useRoutes} from 'react-router-dom'
+import { routes } from '@/router/index'
 function ToLogin(){
     const navigateTo=useNavigate()
     useEffect(()=>{
@@ -25,11 +26,12 @@ function ToHome(){
 
 
 export  function beforeRoute (){
-    
+    const routerView = useRoutes(routes)
     const router=useLocation()
     const currentPathName= router.pathname
-    const token =localStorage.getItem("token")
-    if (currentPathName =='login'&&token ) return <ToHome></ToHome>
-    if(currentPathName!='login'&&!token) return <ToLogin></ToLogin>
+    const token =sessionStorage.getItem("token")
+    if (currentPathName =='/login'&&token ) return <ToHome></ToHome>
+    if(currentPathName!='/login'&&!token) return <ToLogin></ToLogin>
+    return routerView
 
 }

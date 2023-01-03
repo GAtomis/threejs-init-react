@@ -15,6 +15,9 @@ import type { Login as LoginForm } from '@/model/user/types'
 import useVerification from '@/hooks/useVerification'
 import { login } from '@/api/user-api'
 import { useDispatch } from 'react-redux'
+import userState from '@/store/modules/user/user'
+import LoadingIcon from '@/components/loading/loading-icon'
+
 export default function Login() {
     const body = document.querySelector(".body");
     const modal = document.querySelector(".modal");
@@ -71,14 +74,14 @@ export default function Login() {
                         callback(new Error('请输入用户名'));
                     }
                 }
-            },{
+            }, {
 
                 validator: (rule: any, value: any, callback: (err?: Error) => void) => {
-                    const limit=4
-                    if (value.length>=limit) {
+                    const limit = 4
+                    if (value.length >= limit) {
                         callback()
                     } else {
-                        callback(new Error('用户名长度必须大于'+limit));
+                        callback(new Error('用户名长度必须大于' + limit));
                     }
                 }
             }
@@ -98,7 +101,7 @@ export default function Login() {
                 }
             }
         ],
-        "code":[
+        "code": [
             {
                 validator: (rule: any, value: any, callback: (err?: Error) => void) => {
 
@@ -114,8 +117,8 @@ export default function Login() {
             {
                 validator: (rule: any, value: any, callback: (err?: Error) => void) => {
                     console.log(typeof value);
-                    
-                    if (value.length==4) {
+
+                    if (value.length == 4) {
                         callback()
 
                     } else {
@@ -123,7 +126,7 @@ export default function Login() {
                     }
                 }
             },
-        
+
         ]
     }
     // 列表表单
@@ -147,22 +150,22 @@ export default function Login() {
             if (!isPass) {
 
                 return {
-                        field,
-                        errMsg,
-                        className: " showTip tip  ",
-                        isPass
-         
+                    field,
+                    errMsg,
+                    className: " showTip tip  ",
+                    isPass
+
                 }
 
 
             } else {
                 return {
 
-                         field,
-                        errMsg,
-                        className: " fadeTip tip  ",
-                        isPass
-               
+                    field,
+                    errMsg,
+                    className: " fadeTip tip  ",
+                    isPass
+
 
                 }
             }
@@ -173,48 +176,46 @@ export default function Login() {
 
     }
 
-    const validationProcess=()=>{
+    const validationProcess = () => {
 
-        return new Promise((resolve,reject)=>{
+        return new Promise((resolve, reject) => {
             //是否通过验证
-            let state=true
-            const item={}
+            let state = true
+            const item = {}
             Object.keys(rules).forEach((key) => {
                 console.log(key);
-               const res= getRules(key)
-               res&&Object.assign(item,{[key]:res})&&(!res.isPass&&(state=res.isPass))
-            
+                const res = getRules(key)
+                res && Object.assign(item, { [key]: res }) && (!res.isPass && (state = res.isPass))
+
             })
             setLabelForm(item)
-            state?resolve(console.log("pass!")):reject(console.warn("Form validation failed"));
+            state ? resolve(console.log("pass!")) : reject(console.warn("Form validation failed"));
 
         })
-   
-        
+
+
     }
 
-    const dispatch =useDispatch()
+    const dispatch = useDispatch()
     //点击Login
+    let [isLoading, setIsLoading] = useState(false)
     const loginForm = async () => {
-        
-        await  validationProcess()
-       const res=await login(form)
 
-        console.log("res",res);
-        
-            
+        await validationProcess()
+        const { result: { token } } = await login(form)
+        dispatch({ type: 'setToken', val: token })
+        setIsLoading(true)
+
+        // const res = await login(form)
+
+        // setIsLoading(false)
 
 
     }
-
-
-
-
-
-
 
     return (
         <div className='body'>
+
             <div className="scroll-down">SCROLL DOWN
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                     <path d="M16 3C8.832031 3 3 8.832031 3 16s5.832031 13 13 13 13-5.832031 13-13S23.167969 3 16 3zm0 2c6.085938 0 11 4.914063 11 11 0 6.085938-4.914062 11-11 11-6.085937 0-11-4.914062-11-11C5 9.914063 9.914063 5 16 5zm-1 4v10.28125l-4-4-1.40625 1.4375L16 23.125l6.40625-6.40625L21 15.28125l-4 4V9z" />
@@ -245,12 +246,11 @@ export default function Login() {
                                 </div >
                                 <img onClick={resetCode} src={codeUrl as string} className="Verification-code" alt="" />
                             </div>
-
                         </div>
                         <p className={labelForm?.['code']?.className ?? 'tip'}>{labelForm && labelForm['code'] ? labelForm['code'].errMsg : ''}</p>
                         <div className="modal-buttons" >
                             <a href="" className="">Forgot your password?</a>
-                            <button className="input-button" onClick={loginForm}>Login</button>
+                            <button className="input-button" onClick={loginForm}>{isLoading ? <LoadingIcon></LoadingIcon> : `Login`}</button>
 
                         </div>
                         <p className="sign-up">Don't have an account? <a href="#">Sign up now</a></p>

@@ -19,10 +19,8 @@ const App: React.FC = () => {
   const dispatch = useDispatch()
   //  dispatch({type:"add4"})
   const clickHome = () => {
-
-
-
-    dispatch(appStore.asyncActions.asyncSetToken({val:"我要改变"}))
+    dispatch({type:"setVisible",val:1})
+    // dispatch(appStore.asyncActions.asyncSetToken({val:"我要改变"}))
   }
   return (
 
