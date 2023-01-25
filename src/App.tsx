@@ -13,9 +13,11 @@ import { routes } from '@/router/index'
 // import Notifcations from   "@/components/Notifcations"
 // import store from '@/store/index'
 import { useEffect } from 'react';
+import BeforeRoute from './router/beforeRoute'; 
 
 function App() {
-  const routerView = useRoutes(routes)
+  // const routerView = useRoutes(routes)
+
   // const [messageApi, contextHolder] = message.useMessage();
   // useEffect(() => {
   //   // 监听state的变化
@@ -35,7 +37,7 @@ function App() {
     <div className="App">
 
       {/* <Notifcations></Notifcations> */}
-      {routerView}
+      <BeforeRoute></BeforeRoute>
       {/* <Outlet/> */}
     </div>
   )

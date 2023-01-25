@@ -26,7 +26,7 @@ export function register(data:Register) {
 }
 export function getUserInfo() {
   return http.request<any,Result<UserInfo>>({
-    url:"user/userInfo",
+    url:"user/getUserInfo",
   })
 }
 export function createUserInfo(data:UserInfo) {

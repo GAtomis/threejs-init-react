@@ -205,12 +205,6 @@ export default function Login() {
         const { result: { token } } = await login(form)
         dispatch({ type: 'setToken', val: token })
         setIsLoading(true)
-
-        // const res = await login(form)
-
-        // setIsLoading(false)
-
-
     }
 
     return (

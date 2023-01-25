@@ -17,7 +17,7 @@ import {
     VideoCameraOutlined,
 } from '@ant-design/icons';
 
-type MenuItem={
+type MenuItem = {
     key: React.Key;
     icon: React.ReactNode;
     children: any[] | undefined;
@@ -30,7 +30,7 @@ function getItem(
     icon?: React.ReactNode,
     children?: any[],
     type?: 'group',
-):MenuItem {
+): MenuItem {
     return {
         key,
         icon,
@@ -52,28 +52,27 @@ const Aside: React.FC = () => {
         setMenus([
             getItem("Dashboard", "/home", <VideoCameraOutlined />),
             getItem('three', 'about', <UserOutlined />, [
-                getItem('Started', '/about'),
+                getItem('started', '/started'),
+                getItem('about', '/about'),
                 getItem('Gasp', '/gasp'),
-            ]),
 
+            ]),
 
             {
                 key: '/key2',
                 icon: <UploadOutlined />,
                 label: 'any2',
-                children:[]
-            }])     
+                children: []
+            }])
 
     }, [])
-    useEffect(()=>{
-
-        setOpenKeys(  useRouterFilter<MenuItem,React.Key>(menus,(item,parents)=>{
+    useEffect(() => {
+        setOpenKeys(useRouterFilter<MenuItem, React.Key>(menus, (item, parents) => {
             console.warn(parents);
-            return  (item.key==route.pathname&&parents)?parents?.key:''
+            return (item.key == route.pathname && parents) ? parents?.key : ''
         }) as string[]
-)
- 
-    },[menus])
+        )
+    }, [menus])
 
 
     const menuClick = (e: any) => {

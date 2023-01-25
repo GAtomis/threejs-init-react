@@ -8,30 +8,65 @@
  */
 
 import { useEffect } from 'react'
-import {useLocation, useNavigate,useRoutes} from 'react-router-dom'
+import { useLocation, useNavigate, useRoutes } from 'react-router-dom'
+import { message } from 'antd'
+import { useSelector, useDispatch } from 'react-redux'
 import { routes } from '@/router/index'
-function ToLogin(){
-    const navigateTo=useNavigate()
-    useEffect(()=>{
-        
+import type { RootState } from "@/store"
+import { getUserInfo } from '@/api/user-api'
+import useAsyncEffect from '@/hooks/useAsyncEffect'
+function ToLogin() {
+    const navigateTo = useNavigate()
+    useEffect(() => {
+        message.error('The identity information is invalid, please log in again')
         navigateTo('/login')
-    },[])
+    }, [])
     return <div></div>
 
 }
-
-function ToHome(){
+function ToHome() {
+    const navigateTo = useNavigate()
+    useEffect(() => {
+        message.success('System logged in')
+        navigateTo('/home')
+    }, [])
     return <div></div>
+}
+ function ToUserInfo() {
+    const dispatch = useDispatch()
+    // const routerView = useRoutes(routes)
+        const router = useLocation()
+
+    const currentPathName = router.pathname
+    const navigateTo = useNavigate()
+    useAsyncEffect( async () => {
+        try {
+            const { result } = await getUserInfo()
+            dispatch({ type: 'setUserInfo', val: result })
+            navigateTo(currentPathName)   
+        } catch (error) {
+            navigateTo('/login')
+        }
+    }, [])
+    return <div></div>
+ 
+
 }
 
 
-export  function beforeRoute (){
+export default function useBeforeRoute() {
+    console.log("执行了一遍");
+    
     const routerView = useRoutes(routes)
-    const router=useLocation()
-    const currentPathName= router.pathname
-    const token =sessionStorage.getItem("token")
-    if (currentPathName =='/login'&&token ) return <ToHome></ToHome>
-    if(currentPathName!='/login'&&!token) return <ToLogin></ToLogin>
+    const router = useLocation()
+    const currentPathName = router.pathname
+    const token = sessionStorage.getItem("token")
+    const { name } = useSelector((state: RootState) => ({
+        name: state.userReducer.userInfo.name
+    }))
+    if (currentPathName == '/login' && token) return <ToHome></ToHome>
+    if (currentPathName != '/login' && !token) return <ToLogin></ToLogin>
+    if (currentPathName != '/login' && !name) return <ToUserInfo></ToUserInfo>
     return routerView
 
 }

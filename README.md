@@ -112,16 +112,3 @@ const {num} = useSelector(state=>{
 npm i redux-thunk
 ```
 更换插件
-
-## THREE JS
-* 初始化镜头,场景,渲染器 dom,材料
-* Gsap 动画渲染
-* cube发生形变
-* 安装调试UI界面 dat.gui
-
-
-### 纹理
-* 纹理旋转
-* 纹理透明度
-* 纹理遮挡对比度
-* 纹理光线-PBR

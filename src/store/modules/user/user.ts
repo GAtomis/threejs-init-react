@@ -8,34 +8,29 @@
  */
 
 import type {Store}from '../types'
-import {login} from '@/api/user-api'
-import type {Login} from '@/model/user/types'
-import { resolve } from 'path'
+import type {Login,UserInfo} from '@/model/user/types'
+
 export type UserStore ={
     token:string
-    username:string
-    avatar:string
+    userInfo:UserInfo
 
 }
 const store={
     state:{
         token:window.sessionStorage.getItem('token'),
-        username:"root",
-        avatar:""
+        userInfo:{}
     },
     action:{
         setToken(newState:UserStore,action:{type:string,val:string}){
             newState.token=action.val
             window.sessionStorage.setItem('token',action.val)
         }, 
-        setUsername(newState:UserStore,action:{type:string,val:any}){
-            newState.username=action.val  
+        setUserInfo(newState:UserStore,action:{type:string,val:any}){
+            newState.userInfo=action.val
         }
     }, 
     asyncActions:{
         asyncLogin(action:{type?:string,val:Login}){
-
-
             return  async  (disp:Function)=>{
                     // await login (action.val)
                     disp({type:'setToken',val:'123'})

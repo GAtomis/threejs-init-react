@@ -16,6 +16,7 @@ import { BrowserRouter, HashRouter, Routes, Route, Navigate } from 'react-router
 import Layout from '@/layout'
 const AboutPage = lazy(() => import("@/views/THREE_JS/About"))
 const HomePage = lazy(() => import("@/views/Home"))
+const Started =lazy(()=>import("@/views/THREE_JS/Started"))
 const baseRouter = () => (<BrowserRouter>
     <Routes  >
         <Route path="/" element={<App ></App>} >
@@ -50,6 +51,10 @@ export const routes = [
         {
             path: '/gasp',
             element: ElementWithLoading(<Gasp/>)
+        },
+        {
+            path: '/started',
+            element: ElementWithLoading(<Started/>)
         },
     ]
     },

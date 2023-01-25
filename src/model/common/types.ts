@@ -25,3 +25,10 @@ export type Result <T>={
     item: T
     total: number
   }
+
+  export type DBModel = {
+    id?: string | number
+    createdAt?: string
+    deletedAt?: string
+    updatedAt?: string
+  }
