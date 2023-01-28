@@ -2,7 +2,7 @@
  * @Author: GAtomis 850680822@qq.com
  * @Date: 2023-01-28 16:02:05
  * @LastEditors: GAtomis 850680822@qq.com
- * @LastEditTime: 2023-01-28 20:39:01
+ * @LastEditTime: 2023-01-29 02:17:09
  * @FilePath: /workspace/threejs-init-react/src/views/THREE_JS/Light.tsx
  * @Description: threejs 灯光效果
  */
@@ -10,6 +10,7 @@ import React, { useEffect } from 'react'
 import * as THREE from "three"
 import useElementSize from './hooks/useElementSize'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { useGui } from "@/utils/useGui"
 export default function Light() {
 
     const dom = document.querySelector("#Content")
@@ -22,18 +23,37 @@ export default function Light() {
     scene.add(camera)
 
 
-    const shpere = getShpereMesh()
-    const plane = getPlaneMesh()
 
-    scene.add(shpere, plane)
+
     //初始化渲染器
     const renderer = new THREE.WebGLRenderer({ antialias: true })
     //设置渲染尺寸
     console.log(winWidth, winHeight);
     renderer.setSize(winWidth, winHeight)
+
+    
     /* 初始化部分 */
     // const clock = new THREE.Clock()
     let controls: OrbitControls
+ 
+    const shpere = getShpereMesh()
+    const plane = getPlaneMesh()
+
+    const directionalLight = setDirectionalLight()  
+    const light = setLight()
+    //设置阴影面积
+    directionalLight.shadow.mapSize.set(2048,2048) 
+    useGui(gui=>{
+        gui.add(directionalLight.position,"x",1,50).name("平行光x")
+        gui.add(directionalLight.position,"y",1,50).name("平行光y") 
+        gui.add(directionalLight.position,"z",1,50).name("平行光z")
+        gui.add(directionalLight.shadow,"radius",0,30).step(1).name("阴影模糊")
+    }) 
+
+    scene.add(shpere, plane)
+  
+    enableShowMap(renderer)
+
     /**
      * @description: 设置坐标轴辅助器&添加入场景
      * @return {*}
@@ -49,7 +69,7 @@ export default function Light() {
      * @param {number} time
      * @return {*}
      */
-    const render = (time?: number) => {
+    function render  (time?: number) {
         // cube.position.z+=.01
         // time&&setMoveCube(time)
         // runClock()
@@ -83,7 +103,7 @@ export default function Light() {
         const mesh = new THREE.Mesh(planeGeometry, material)
         mesh.position.y = -2
         mesh.rotation.x = -Math.PI / 2
-        mesh.receiveShadow=true
+        mesh.receiveShadow = true
         return mesh
 
     }
@@ -95,8 +115,8 @@ export default function Light() {
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
         directionalLight.position.set(10, 10, 10)
         directionalLight.castShadow = true
-
         scene.add(directionalLight);
+        return directionalLight
 
     }
     /**
@@ -106,6 +126,7 @@ export default function Light() {
     function setLight() {
         const light = new THREE.AmbientLight(0xffffff, 0.5)
         scene.add(light)
+        return light
 
     }
 
@@ -117,6 +138,7 @@ export default function Light() {
     function enableShowMap(render: THREE.WebGLRenderer) {
         render.shadowMap.enabled = true
     }
+
 
     useEffect(() => {
 
@@ -131,9 +153,8 @@ export default function Light() {
         controls.enableDamping = true
         render()
         setAxesHelper()
-        setDirectionalLight()
-        setLight()
-        enableShowMap(renderer)
+
+     
 
 
         return () => {
