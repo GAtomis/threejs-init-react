@@ -1,8 +1,8 @@
 /*
  * @Author: Gavin 850680822@qq.com
  * @Date: 2022-11-26 10:28:37
- * @LastEditors: “Gavin” “850680822@qq.com”
- * @LastEditTime: 2022-12-12 23:30:30
+ * @LastEditors: GAtomis 850680822@qq.com
+ * @LastEditTime: 2023-01-28 19:27:11
  * @FilePath: \three-admin-react\src\views\About.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -12,9 +12,11 @@ import { useEffect } from "react"
 import * as THREE from "three"
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import gsap from 'gsap'
-import wenli3 from './wenli3.webp'
-import  {useGui} from "@/utils/useGui"
-import useTorus from '@/views/THREE_JS/material/useTorus'
+// import wenli3 from './wenli3.webp'
+// import  {useGui} from "@/utils/useGui"
+// import useTorus from '@/views/THREE_JS/material/useTorus'
+import {rotationAni} from './animations/test'
+
 function Started() {
     /* 初始化部分 */
     const winWidth = window.innerWidth * .8, 
@@ -31,9 +33,12 @@ function Started() {
     scene.add(group)
     const cube1 = new THREE.Mesh(new THREE.BoxGeometry(1,1,1),new THREE.MeshBasicMaterial({color:"#b33d3d"}))
     const cube2 = new THREE.Mesh(new THREE.BoxGeometry(1,1,1),new THREE.MeshBasicMaterial({color:"#2626e0"}))
+    const cube3 = new THREE.Mesh(new THREE.BoxGeometry(1,1,1),new THREE.MeshBasicMaterial({color:"#40d03f"}))
     cube1.position.x=-2
     cube2.position.x=2
-    group.add(cube1).add(cube2)
+    cube3.position.x=0
+    group.add(cube1).add(cube2).add(cube3).position.y=0
+
     // useGui(gui=>{
     //         gui.add(doorPic.center,'x',0,1).step(0.1).name("对于旋转的中心X点")
     //         gui.add(doorPic.center,'y',0,1).step(0.1).name("对于旋转的中心Y点")
@@ -64,6 +69,8 @@ function Started() {
     //初始化渲染器
     const renderer = new THREE.WebGLRenderer({ antialias: true })
     //设置渲染尺寸
+  
+    
     renderer.setSize(winWidth, winHeigh)
     /* 初始化部分 */
     // const clock = new THREE.Clock()
@@ -97,6 +104,7 @@ function Started() {
         controls.enableDamping=true
         render()
         setAxesHelper()
+
         // setScale()
         // setRotation()
         // runGsap()
@@ -105,7 +113,7 @@ function Started() {
         //   // cube.position.set(5,0,0)
 
         // },500)
-
+ 
     }, [])
     window.addEventListener("resize",()=>{
         console.log("尺寸发生改变");
@@ -128,7 +136,7 @@ function Started() {
         }
     })
     /**
-     * @description: 轨道控制器查看物体
+     * @description: 1秒60帧的回调函数
      * @param {number} time
      * @return {*}
      */
@@ -136,6 +144,8 @@ function Started() {
         // cube.position.z+=.01
         // time&&setMoveCube(time)
         // runClock()
+
+        time&&rotationAni(group,time)
         //渲染阻尼效果
         controls?.update()
         renderer.render(scene, camera)

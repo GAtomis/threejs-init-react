@@ -52,6 +52,7 @@ const App: React.FC = () => {
             padding: 10,
             minHeight: 280,
           }}
+          id="Content"
         >
           <Outlet/>
 

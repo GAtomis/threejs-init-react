@@ -58,15 +58,15 @@ export default function useBeforeRoute() {
     console.log("执行了一遍");
     
     const routerView = useRoutes(routes)
-    const router = useLocation()
-    const currentPathName = router.pathname
-    const token = sessionStorage.getItem("token")
-    const { name } = useSelector((state: RootState) => ({
-        name: state.userReducer.userInfo.name
-    }))
-    if (currentPathName == '/login' && token) return <ToHome></ToHome>
-    if (currentPathName != '/login' && !token) return <ToLogin></ToLogin>
-    if (currentPathName != '/login' && !name) return <ToUserInfo></ToUserInfo>
+    // const router = useLocation()
+    // const currentPathName = router.pathname
+    // const token = sessionStorage.getItem("token")
+    // const { name } = useSelector((state: RootState) => ({
+    //     name: state.userReducer.userInfo.name
+    // }))
+    // if (currentPathName == '/login' && token) return <ToHome></ToHome>
+    // if (currentPathName != '/login' && !token) return <ToLogin></ToLogin>
+    // if (currentPathName != '/login' && !name) return <ToUserInfo></ToUserInfo>
     return routerView
 
 }

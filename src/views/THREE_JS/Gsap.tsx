@@ -109,7 +109,7 @@ function About() {
         setAxesHelper()
         setScale()
         setRotation()
-        // runGsap()
+        runGsap()
 
         // setTimeout(()=>{
         //   // cube.position.set(5,0,0)
@@ -209,7 +209,7 @@ function About() {
             //时间
             duration: 5,
             //延迟
-            delay:2,
+            delay:2, 
             //动画效果
             ease: "power1.inOut",
             onComplete: () => console.log("动画完成"),
