@@ -2,7 +2,7 @@
  * @Author: GAtomis 850680822@qq.com
  * @Date: 2023-01-28 16:02:05
  * @LastEditors: GAtomis 850680822@qq.com
- * @LastEditTime: 2023-01-29 02:17:09
+ * @LastEditTime: 2023-01-29 13:26:27
  * @FilePath: /workspace/threejs-init-react/src/views/THREE_JS/Light.tsx
  * @Description: threejs 灯光效果
  */
@@ -31,27 +31,27 @@ export default function Light() {
     console.log(winWidth, winHeight);
     renderer.setSize(winWidth, winHeight)
 
-    
+
     /* 初始化部分 */
     // const clock = new THREE.Clock()
     let controls: OrbitControls
- 
+
     const shpere = getShpereMesh()
     const plane = getPlaneMesh()
 
-    const directionalLight = setDirectionalLight()  
+    //平行光
+    // const directionalLight = setDirectionalLight()  
+
+
+
     const light = setLight()
-    //设置阴影面积
-    directionalLight.shadow.mapSize.set(2048,2048) 
-    useGui(gui=>{
-        gui.add(directionalLight.position,"x",1,50).name("平行光x")
-        gui.add(directionalLight.position,"y",1,50).name("平行光y") 
-        gui.add(directionalLight.position,"z",1,50).name("平行光z")
-        gui.add(directionalLight.shadow,"radius",0,30).step(1).name("阴影模糊")
-    }) 
+    //聚光灯 
+    const spotLight = setSpotLight()
+
+
 
     scene.add(shpere, plane)
-  
+
     enableShowMap(renderer)
 
     /**
@@ -69,7 +69,7 @@ export default function Light() {
      * @param {number} time
      * @return {*}
      */
-    function render  (time?: number) {
+    function render(time?: number) {
         // cube.position.z+=.01
         // time&&setMoveCube(time)
         // runClock()
@@ -98,7 +98,7 @@ export default function Light() {
      * @return {*}
      */
     function getPlaneMesh() {
-        const planeGeometry = new THREE.PlaneGeometry(10, 10)
+        const planeGeometry = new THREE.PlaneGeometry(30, 30)
         const material = new THREE.MeshStandardMaterial()
         const mesh = new THREE.Mesh(planeGeometry, material)
         mesh.position.y = -2
@@ -108,7 +108,7 @@ export default function Light() {
 
     }
     /**
-     * @description: 设置直线光
+     * @description: 设置平行光
      * @return {*}
      */
     function setDirectionalLight() {
@@ -116,8 +116,47 @@ export default function Light() {
         directionalLight.position.set(10, 10, 10)
         directionalLight.castShadow = true
         scene.add(directionalLight);
+        useGui(gui => {
+                //设置阴影面积
+            directionalLight.shadow.mapSize.set(2048, 2048)
+            gui.add(directionalLight.position, "x", 1, 50).name("平行光x")
+            gui.add(directionalLight.position, "y", 1, 50).name("平行光y")
+            gui.add(directionalLight.position, "z", 1, 50).name("平行光z")
+            gui.add(directionalLight.shadow, "radius", 0, 30).step(1).name("阴影模糊")
+            gui.add(directionalLight.shadow.camera, "near", 0, 40, .1).onChange(() => {
+                //利用正交摄像机来做阴影处理
+                directionalLight.shadow.camera.updateProjectionMatrix()
+            }).name("阴影的near端")
+        })
         return directionalLight
 
+    }
+
+    /**
+     * @description: 聚光灯
+     * @return {*}
+     */
+    function setSpotLight() {
+        const spotLight = new THREE.SpotLight(0xffffff, 1)
+        spotLight.position.set(5, 5, 5)
+        spotLight.castShadow = true
+        spotLight.shadow.radius=20
+        spotLight.target=shpere
+        spotLight.shadow.mapSize.set(4096,4096)
+        spotLight.angle=Math.PI/6
+        spotLight.distance=0
+        spotLight.penumbra=0
+        renderer.physicallyCorrectLights=true
+        spotLight.decay=0
+        useGui(gui=>{
+            gui.add(shpere.position, "x", 0, 50,.5).name("球体的x位置")
+            gui.add(spotLight,"angle",0,Math.PI/2,.1).name("聚光灯角度")
+            gui.add(spotLight,"distance",0,40,.1).name("聚光灯衰减距离")
+            gui.add(spotLight,"penumbra",0,1,.1).name("聚光灯衰减效果")
+            gui.add(spotLight,"decay",0,2,.1).name("聚光灯沿灯光距离变暗")
+        })
+        scene.add(spotLight)
+        return spotLight
     }
     /**
      * @description: 设置环境光
@@ -154,7 +193,7 @@ export default function Light() {
         render()
         setAxesHelper()
 
-     
+
 
 
         return () => {
