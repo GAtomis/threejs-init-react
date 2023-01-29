@@ -2,7 +2,7 @@
  * @Author: GAtomis 850680822@qq.com
  * @Date: 2023-01-20 13:27:51
  * @LastEditors: GAtomis 850680822@qq.com
- * @LastEditTime: 2023-01-28 20:41:12
+ * @LastEditTime: 2023-01-29 00:24:20
  * @FilePath: /workspace/threejs-init-react/THREEJS_LOG.md
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -74,3 +74,11 @@ renderer.setSize(width,height)
 
 
 ### 阴影
+#### 初始化
+PBR素材
+1. 材质要满足能够对光照有反应
+2. 设置渲染器开启阴影的计算 renderer.shadowMap = true
+3. 设置光照投射阴影 directional
+4. 设置物体投射阴影
+5. 设置物体接受阴影  
+#### 阴影模糊
