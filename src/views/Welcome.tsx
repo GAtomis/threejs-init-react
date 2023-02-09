@@ -2,7 +2,7 @@
  * @Author: GAtomis 850680822@qq.com
  * @Date: 2023-01-30 12:38:46
  * @LastEditors: GAtomis
- * @LastEditTime: 2023-01-31 20:34:04
+ * @LastEditTime: 2023-02-04 17:17:41
  * @Description: Welcome
  */
 import React, { useEffect } from 'react'
@@ -68,18 +68,21 @@ export default function Welcome() {
 
 
         })
-        loader.load("./model/xq6.glb", gltf => {
-            gltf.scene.scale.set(.1, .1, .1)
-            // gltf.scene.rotation.y=-Math.PI/5
+        loader.load("./model/mech_drone.glb", gltf => {
+            gltf.scene.scale.set(10, 10, 10)
+            gltf.scene.rotation.y = Math.PI
             gltf.scene.position.set(8, -12, 0)
+
+
             scene.add(gltf.scene)
+            followObject3D(gltf.scene)
             window.addEventListener("mousemove", (e: MouseEvent) => {
                 let x = (e.clientX / window.innerWidth) * 2 - 1,
                     y = (e.clientY / window.innerHeight) * 2 - 1
                 let timeLine = gsap.timeline()
 
                 timeLine.to(gltf.scene.rotation, {
-                    y: x, x: y, duration: 1
+                    y: x + Math.PI * .9, x: y, duration: 1
                 })
 
             })
@@ -90,8 +93,8 @@ export default function Welcome() {
             const moon = gltf.scene.children[0]
 
             for (let j = 0; j < 10; j++) {
-                let moonInstance = new THREE.InstancedMesh(
-                    moon.geometry,
+                let moonInstance = new THREE.InstancedMesh(//@ts-ignore
+                    moon.geometry,//@ts-ignore
                     moon.material,
                     100
                 )
@@ -154,8 +157,18 @@ export default function Welcome() {
         light.position.set(0, 0, -1)
         const light2 = new THREE.DirectionalLight(0xfffffff, 1)
         light.position.set(-1, 1, 1)
+
+
+
         scene.add(light).add(light1).add(light2)
 
+    }
+    function followObject3D(Object3D: any) {
+
+        const light2 = new THREE.DirectionalLight(0xfffffff, 1)
+        light2.position.set(8, -12 + 2, 0 + 5)
+        light2.target = Object3D
+        scene.add(new THREE.DirectionalLightHelper(light2))
     }
     /**
      * @description: 设置坐标轴辅助器&添加入场景
@@ -206,9 +219,9 @@ export default function Welcome() {
     return (
 
         <div>
-           
+
             <div id="canvas">
-       
+
             </div>
         </div>
 

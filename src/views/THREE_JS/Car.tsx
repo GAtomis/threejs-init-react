@@ -1,8 +1,8 @@
 /*
  * @Author: GAtomis 850680822@qq.com
  * @Date: 2023-01-28 16:02:05
- * @LastEditors: GAtomis 850680822@qq.com
- * @LastEditTime: 2023-01-30 01:43:16
+ * @LastEditors: GAtomis
+ * @LastEditTime: 2023-02-04 17:15:05
  * @FilePath: /workspace/threejs-init-react/src/views/THREE_JS/Light.tsx
  * @Description: threejs 灯光效果
  */
@@ -71,8 +71,11 @@ export default function Car() {
     function addGridHelper() {
 
         const grid = new THREE.GridHelper(20, 40, 0xffffff, 0xffffff);
+        //@ts-ignore
         grid.material.opacity = 0.2;
+        //@ts-ignore
         grid.material.depthWrite = false;
+        //@ts-ignore
         grid.material.transparent = true;
         scene.add(grid);
         return grid
@@ -151,16 +154,16 @@ export default function Car() {
             });
             const carModel = gltf.scene.children[0];
 
-
+            //@ts-ignore
             carModel.getObjectByName('body')!.material = bodyMaterial;
+            //@ts-ignore
+            carModel.getObjectByName('rim_fl').material = detailsMaterial;//@ts-ignore
+            carModel.getObjectByName('rim_fr').material = detailsMaterial;//@ts-ignore
+            carModel.getObjectByName('rim_rr').material = detailsMaterial;//@ts-ignore
+            carModel.getObjectByName('rim_rl').material = detailsMaterial;//@ts-ignore
+            carModel.getObjectByName('trim').material = detailsMaterial;//@ts-ignore
 
-            carModel.getObjectByName('rim_fl').material = detailsMaterial;
-            carModel.getObjectByName('rim_fr').material = detailsMaterial;
-            carModel.getObjectByName('rim_rr').material = detailsMaterial;
-            carModel.getObjectByName('rim_rl').material = detailsMaterial;
-            carModel.getObjectByName('trim').material = detailsMaterial;
-
-            carModel.getObjectByName('glass').material = glassMaterial;
+            carModel.getObjectByName('glass').material = glassMaterial;//@ts-ignore
 
             wheels.push(
                 carModel.getObjectByName('wheel_fl'),
@@ -189,7 +192,7 @@ export default function Car() {
 
                     wheels[1].rotation.z = val
                   const fangxiangpan=carModel.getObjectByName("steering_wheel")
-                  fangxiangpan.rotation.y=-val*4*2
+                  fangxiangpan!.rotation.y=-val*4*2
                    
 
                 })

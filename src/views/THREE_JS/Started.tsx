@@ -1,8 +1,8 @@
 /*
  * @Author: Gavin 850680822@qq.com
  * @Date: 2022-11-26 10:28:37
- * @LastEditors: GAtomis 850680822@qq.com
- * @LastEditTime: 2023-01-28 19:27:11
+ * @LastEditors: GAtomis
+ * @LastEditTime: 2023-02-04 17:21:18
  * @FilePath: \three-admin-react\src\views\About.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -31,13 +31,7 @@ function Started() {
     scene.add(camera)
     const group = new THREE.Group()
     scene.add(group)
-    const cube1 = new THREE.Mesh(new THREE.BoxGeometry(1,1,1),new THREE.MeshBasicMaterial({color:"#b33d3d"}))
-    const cube2 = new THREE.Mesh(new THREE.BoxGeometry(1,1,1),new THREE.MeshBasicMaterial({color:"#2626e0"}))
-    const cube3 = new THREE.Mesh(new THREE.BoxGeometry(1,1,1),new THREE.MeshBasicMaterial({color:"#40d03f"}))
-    cube1.position.x=-2
-    cube2.position.x=2
-    cube3.position.x=0
-    group.add(cube1).add(cube2).add(cube3).position.y=0
+
 
     // useGui(gui=>{
     //         gui.add(doorPic.center,'x',0,1).step(0.1).name("对于旋转的中心X点")
@@ -169,21 +163,21 @@ function Started() {
      * @param {number} time
      * @return {*}
      */
-    const setMoveCube = (time: number) => {
-        let t = time / 1000
+    // const setMoveCube = (time: number) => {
+    //     let t = time / 1000
 
-        cube.position.x = (t * 1) % 5
-        if (cube.position.x > 5) {
-            cube.position.x = 0
-        }
-    }
+    //     cube.position.x = (t * 1) % 5
+    //     if (cube.position.x > 5) {
+    //         cube.position.x = 0
+    //     }
+    // }
 
     /**
      * @description: 设置缩放和放大
      * @return {*}
      */
     const setScale = () => {
-        cube.scale.set(2, 2, 1)
+        // cube.scale.set(2, 2, 1)
     }
 
     /**
@@ -192,34 +186,16 @@ function Started() {
      */
     const setRotation = () => {
         //math.PI等于180度 XZY旋转顺序
-        cube.rotation.set(Math.PI / 4, 0, 0, "XYZ")
+        // cube.rotation.set(Math.PI / 4, 0, 0, "XYZ")
     }
     //运行时钟获得当前时间
     const runClock = () => {
-        const deltaTime = clock.getDelta()
-        console.log(deltaTime);
-        return deltaTime
+        // const deltaTime = clock.getDelta()
+        // console.log(deltaTime);
+        // return deltaTime
 
     }
-    //运行gasp 
-    const runGsap = () => {
-        gsap.to(cube.position, {
-            //坐标轴距离
-            x: 5,
-            //时间
-            duration: 5,
-            //延迟
-            delay:2,
-            //动画效果
-            ease: "power1.inOut",
-            onComplete: () => console.log("动画完成"),
-            onStart: () => console.log("动画开始"), 
-            //循环次数
-            repeat: 2,
-            yoyo:true
-        })
-        gsap.to(cube.rotation, { x: 2 * Math.PI, duration: 5, ease: "power1.inOut", onComplete: () => console.log("动画完成"), onStart: () => console.log("动画开始") })
-    }
+
 
     return (
         <div id="warp-about">
